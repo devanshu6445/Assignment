@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.assignment.BR
 import com.example.assignment.R
 import com.example.assignment.database.ModelData
 import com.example.assignment.databinding.ItemViewBinding
@@ -22,7 +23,7 @@ class Adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = modelDataList[position]
-        binding.data = data
+        (holder as ViewHolder).bind(data)
     }
 
     override fun getItemCount(): Int {
@@ -40,8 +41,12 @@ class Adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         notifyItemRangeChanged(pos,diff.size)
     }
 
-    class ViewHolder(binding: ItemViewBinding) :RecyclerView.ViewHolder(binding.root){
+    class ViewHolder(private val binding: ItemViewBinding) :RecyclerView.ViewHolder(binding.root){
         val dbID: TextView = itemView.findViewById<TextView>(R.id.dbID)
         val sampleText: TextView = itemView.findViewById<TextView>(R.id.sampleText)
+        fun bind(obj:Any){
+            binding.setVariable(BR.data,obj)
+            binding.executePendingBindings()
+        }
     }
 }
